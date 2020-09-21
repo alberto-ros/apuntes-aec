@@ -1,0 +1,385 @@
+% -*- mode: latex; mode: flyspell; mode: auto-fill -*-
+
+\documentclass[12pt,onecolumn]{memoir}
+\usepackage[english,activeacute]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[hyperindex,backref,bookmarks,linktocpage]{hyperref}
+
+\usepackage[T1]{fontenc}
+
+\usepackage{textcomp}
+\usepackage[sc]{mathpazo}
+\usepackage{helvet}
+\linespread{1.05} % Palatino needs more leading (space between lines)
+
+\usepackage{enumerate}
+\usepackage{epsfig}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{rotating}
+\usepackage{colortbl}
+
+\hypersetup{ 
+  pdfauthor = {Alberto Ros Bardisa}, 
+  pdftitle = {Apuntes de Ampliación de Estructuras de Computadores}, 
+  pdfkeywords = {arquitectura de computadores, rendimiento, segmentación, memoria}, 
+}
+
+\DeclareTextFontCommand{\c}{\sffamily \slshape}
+
+\setstocksize{297mm}{210mm}
+\settrimmedsize{297mm}{210mm}{*}
+\setlength{\trimtop}{0pt}
+\setlength{\trimedge}{\stockwidth}
+\addtolength{\trimedge}{-\paperwidth}
+\setlrmarginsandblock{35mm}{25mm}{*}
+\setulmarginsandblock{45mm}{50mm}{*}
+\setheadfoot{\onelineskip}{3\onelineskip}
+\setheaderspaces{*}{1.2\onelineskip}{*}
+\checkandfixthelayout
+
+%\parskip 	10pt
+
+\pagestyle{ruled}
+
+\setsecnumdepth{all}
+
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{0}
+
+\makechapterstyle{tesis}{
+  \setlength{\beforechapskip}{70pt}
+  \renewcommand*{\chapnamefont}{%
+    \normalfont\Huge\scshape\raggedleft}
+  \renewcommand*{\chaptitlefont}{%
+    \normalfont\Huge\bfseries\sffamily\raggedleft}
+  \renewcommand*{\afterchapternum}{%
+    \par\hspace{1.5cm}\hrule\vskip\midchapskip}
+}
+
+\chapterstyle{tesis}
+
+\setsecheadstyle{\Large\bfseries\sffamily\raggedright}
+\setsubsecheadstyle{\large\bfseries\sffamily\raggedright}
+\setsubsubsecheadstyle{\normalsize\bfseries\sffamily\raggedright}
+\setparaheadstyle{\normalsize\bfseries\sffamily}
+\setsubparaheadstyle{\normalsize\bfseries\sffamily}
+
+\begin{document}
+
+\hyphenation{ge-ne-ra-dos}
+
+\sloppy
+\widowpenalty=10000
+\clubpenalty=10000
+
+\title{Apuntes de Ampliación de Estructuras de Computadores}
+
+\author{Alberto Ros Bardisa}
+
+% Begin of title page
+\thispagestyle{empty}
+
+\begin{center}
+
+\begin{figure}
+\centering
+%  \epsfig{file=eps/escudo_universidad,width=6cm}
+%  \epsfig{file=eps/escudo.ps,width=6cm,viewport=0 -40 690 639}
+
+  \Large
+
+  %\vspace{1cm}
+
+  \textsc{Universidad de Murcia}
+
+  \large
+
+  Departamento de Ingeniería y \\
+  Tecnología de Computadores
+
+  \vspace{3cm}
+
+\end{figure}
+
+\huge
+
+\textbf{Apuntes de\\ Ampliación de Estructura de Computadores}
+
+\vspace{7cm}
+
+\normalsize
+
+Alberto Ros Bardisa
+
+\vspace{0.5cm}
+
+Murcia, septiembre de 2020
+
+\end{center}
+% End of title page
+
+\cleardoublepage 
+
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+
+Estos apuntes pretenden servir como guía para la asignatura
+``Ampliación de Estructura de Computadores'' del Grado en Ingeniería
+Informática y Programación Conjunta de Estudios Oficiales Grado
+en Matemáticas y Grado en Ingeniería Informática.
+
+
+\setcounter{chapter}{-1}
+
+\def\figurename{Figura}
+\def\tablename{Tabla}
+\def\chaptername{Tema}
+
+\chapter{Presentación de la asignatura}
+\label{cap:presentacion}
+
+Esta asignatura pertenece al área de ``Arquitectura y Tecnología de
+Computadores'' y es la tercera de una serie de asignaturas del grado
+destinadas a comprender cómo funcionan los computadores y cómo
+hacerlos más eficientes.
+
+En ``Fundamentos de Computadores'' se estudia la codificación de la
+información y los sistemas digitales combinacionales. En ``Estructura
+y Tecnología de Computadores'' se estudian sistemas digitales
+secuenciales, un procesador básico y la jerarquía de memoria. En
+``Ampliación de Estructura de Computadores'' se hace énfasis en el
+rendimiento del computador, se estudia un procesador más avanzado
+(segmentado) y aspectos avanzados de la jerarquía de
+memoria. Finalmente, en ``Arquitectura y Organización de
+Computadores'' se estudian aspectos como el diseño de un procesador
+superescalar, la sincronización, el protocolo de coherencia de cachés
+y los modelos de consistencia de memoria.
+
+En particular, en ``Ampliación de Estructura de Computadores'' vamos a
+ver como se pueden mejorar las prestaciones de los computadores por
+primera vez en el grado. Hasta el momento nos hemos centrado en tener
+un computador que funcione correctamente, sin mirar mucho su
+rendimiento. En este curso vamos a construir un ordenador mas potente,
+gracias a mejoras ``arquitectónicas''. Se puede decir, por tanto, que
+en esta asignatura comienza lo que se conoce por \emph{arquitectura de
+  computadores}. No solo vamos a aprender a identificar qué diseño es
+mejor que otro de forma ``cualitativa'' sino que también vamos a
+aprender a decir de forma ``cuantitativa'' cuantas veces mejor es un
+diseño que otro.
+
+Nota: La asignatura tiene asignados 6 ECTS. Es decir, se requieren
+unas 150 horas de trabajo por parte del alumno: 60 horas presenciales
+y 90 horas no presenciales. Esto significa que por cada hora
+presencial, el alumno debe dedicar 1,5 horas más al estudio de la
+asignatura.
+
+\section{Introducción}
+\label{sec:introduccion_presentacion}
+
+Ley de Moore: Los continuos avances en la escala de integración
+permiten reducir el tamaño de los transistores y por tanto el número
+de transistores que hay dentro de un chip. El número de transistores
+por chip se dobla cada año y medio o dos años.
+
+Las mejoras en el rendimiento de los computadores desde su inicio han
+sido debidas tradicionalmente a dos motivos principales: mejoras
+debidas a la tecnología y mejoras debidas a la arquitectura. Hasta los
+70, las mejoras de ambos eran similares. A partir de los 70 las
+mejoras en la tecnología han dominado.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Análisis de prestaciones en arquitectura de computadores}
+\label{cap:prestaciones}
+
+
+
+\section{Introducción}
+\label{sec:introduccion_prestaciones}
+
+Ejemplo de rendimiento de un coche ¿Velocidad? El equivalente en el
+computador serían los MIPS, MFLOPS.. buena medida? No. Ejemplo rutas diferentes. Lo que importa es
+el tiempo dado un origen y un destino.
+
+\section{Definición de rendimiento y métricas populares}
+
+\section{Tiempo de ejecución}
+
+\section{La Ley de Amdahl}
+
+\section{Cómo comparar resultados}
+
+\section{Programas de prueba (benchmarks)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Segmentación básica}
+\label{cap:segmentado}
+
+
+\section{Introducción}
+\label{sec:introduccion_segmentado}
+
+Concepto de segmentación. Segmentación para la ejecución de
+instrucciones: camino de datos y control segmentado. Riesgos de la
+segmentación (estructurales, de datos y de control). Excepciones y su
+implementación.
+
+\subsection{El juego de instrucciones DLX}
+
+Repaso de instrucciones. Remarcar diferencias con MIPS (ETC): blt -> slt \& beqz
+
+\subsection{Procesador multiciclo para DLX}
+
+Repaso de etapas multiciclo (ETC), pero adaptado a DLX. Ejemplo de
+un load, que es el más largo (5 ciclos). El resto de instrucciones se adaptan a éste. 
+
+\section{Segmentación para la ejecución de instrucciones}
+
+Describir segmentación a grandes rasgos, o de forma esquemática. Los
+detalles de implementación se verán al final.
+
+Ejercicio cuantitativo de segmentación.
+
+\section{Problemas de la segmentación: los riesgos}
+
+Si tuvieramos una fábrica de coches la segmentación ya funcionaría
+bien y tendríamos un cauce ideal, produciendo un coche por tiempo de
+cada etapa.
+
+Pero las instrucciones son más complicadas. No todas son iguales. Y la
+ejecución de una puede depender de la otra.
+
+Hay 3 tipos de riesgos: estructurales, de datos y de control. 
+
+\subsection{Riesgos estructurales}
+
+Opciones: duplicar, parar, evitar sw (separar o nops).
+
+\subsection{Riesgos de datos}
+
+Opciones: parar, forwarding, evitar sw (separar o nops).
+
+\subsection{Riesgos de control}
+
+Opciones: parar, adelantar calculo salto, predecir, evitar sw (delay-slot o nops).
+
+Detalle de la implementación. Como parar ante riesgos (y adelantar el
+calculo del salto).
+
+Ejercicios de delay en calculo de tiempo.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Segmentación avanzada y predicción de saltos}
+\label{cap:avanzada}
+
+
+\section{Introducción}
+\label{sec:introduccion_avanzada}
+
+Mitigación de los riesgos de datos: adelantamientos. Mitigación de los riesgos de control (predicción de saltos estática y predicción de saltos dinámica). Segmentación DLX de punto flotante. Cauces con terminación fuera de orden.
+
+\section{Predicción de saltos}
+
+Observación 1: los saltos tienden a tener el mismo comportamiento.
+
+Observación 2: saltos correlacionados.
+
+\subsection{Estática}
+
+Algo más sobre predicción estática saltos para alante o para atrás o comparación == 0 o != 0.
+
+\subsection{Contador saturado por salto}
+
+Ejemplo: bucle.
+
+Aliasing.
+
+\subsection{Correlación}
+
+ejemplo: if d == 0
+ejemplo: found = find(elem); if (found) ...  if a[i] = elem.
+
+historia global.
+
+gshare.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Sistema de memoria de altas prestaciones}
+\label{cap:memoria}
+
+
+\section{Introducción}
+\label{sec:introduccion_memoria}
+
+Introducción a los sistemas de memoria. Diseño de una jerarquía de caches de alto rendimiento: reducción de la tasa de fallos,  reducción de la penalización por fallo y reducción del tiempo de acierto en caches. Organizaciones de la memoria principal. Memoria virtual. Técnicas de traducción rápida de direcciones virtuales. Protección de memoria.
+
+\section{Evaluación del Rendimiento de la Jerarquía de Memoria}
+
+\section{Reducción de la Tasa de Fallos de Caché}
+
+\subsection{Clasificación de fallos de caché}
+
+Podemos distinguir los siguientes motivos por los que se 
+producen fallos en caché:
+
+Forzosos: el primer acceso a un bloque de memoria no puede 
+estar en la caché (poco efecto en programas grandes)
+- Llamados fallos de arranque en frío o de primera referencia
+
+Capacidad: la memoria caché no tiene el tamaño suficiente para 
+contener todos los bloques necesarios
+- En un momento determinado uno de los bloques que se han 
+utilizado tiene que dejar hueco a otro (la caché está llena)
+- Se produce fallo si se vuelve a referenciar el bloque desalojado
+
+Conflicto: la memoria caché no es totalmente asociativa 
+- Aciertos en una caché totalmente asociativa que se vuelven 
+fallos en una asociativa por conjuntos de 
+n-vías se deben a más de n peticiones sobre algunos conjuntos
+
+\subsection{Optimizaciones hardware}
+
+\subsubsection{Aumento del tamaño de bloque}
+
+Y del tamaño de la caché. De hecho la primera figura (pag 29) lo contempla.
+
+\subsubsection{Aumento de la asociatividad}
+
+\subsubsection{Caché de víctimas}
+
+\subsubsection{Búsqueda anticipada de datos e instrucciones (prefetching)}
+
+\subsection{Optimizaciones del compilador}
+
+\subsubsection{Combinación de arrays (merging arrays)}
+
+\subsubsection{Intercambio de iteraciones (loop exchange)}
+
+\subsubsection{Unión de bucles (loop fusion)}
+
+\subsubsection{Blocking}
+
+\subsubsection{Búsqueda anticipada}
+
+
+\section{Reducción de la Penalización por Fallo de Caché}
+
+\section{Reducción del Tiempo en Caso de Acierto en Caché}
+
+\section{Organizaciones de la Memoria Principal}
+
+\bibliographystyle{plain} 
+\bibliography{bibliografia} 
+
+\end{document} 
