@@ -130,7 +130,7 @@ Murcia, septiembre de 2020
 \addcontentsline{toc}{chapter}{Resumen}
 
 Estos apuntes pretenden servir como guía para la asignatura
-``Ampliación de Estructura de Computadores'' del Grado en Ingeniería
+``Ampliación de Estructura de Computadores'' del Grado en Ingeniería 
 Informática y Programación Conjunta de Estudios Oficiales Grado
 en Matemáticas y Grado en Ingeniería Informática.
 
@@ -201,17 +201,142 @@ mejoras en la tecnología han dominado.
 \label{cap:prestaciones}
 
 
-
 \section{Introducción}
 \label{sec:introduccion_prestaciones}
 
-Ejemplo de rendimiento de un coche ¿Velocidad? El equivalente en el
-computador serían los MIPS, MFLOPS.. buena medida? No. Ejemplo rutas diferentes. Lo que importa es
-el tiempo dado un origen y un destino.
+¿Podríamos medir el rendimiento o prestaciones de un computador con un
+solo número? En realidad para ser precisos necesitaríamos más de uno,
+pero por la necesidad de obtener de forma rápida si un computador
+ofrece mejores prestaciones que otro, tratamos de definir las
+prestaciones con un solo número. Veremos en este tema que no es una
+tarea fácil.
 
-\section{Definición de rendimiento y métricas populares}
+A la hora de usar una métrica para medir el rendimiento debemos llevar
+mucho cuidado y saber interpretarla, ya que puede dar lugar a
+confusión.
+
+Pongamos un ejemplo. ¿Cómo mediríamos las prestaciones de un coche?
+¿Velocidad? Lo importante en realidad no es qué velocidad pueda
+alcanzar, sino cuanto tiempo va a tardar en ir de un origen a un destino. Un
+coche más rápido que toma una ruta más larga puede tardar más que uno
+más lento. Además, no es lo mismo si tenemos un coche con una
+capacidad de 5 pasajeros o un autobús con una capacidad de 50. El
+autobús, aunque más lento, muy probablemente realice el trabajo de
+llevar 100 pasajeros de una ciudad a otra antes que el coche.
+Lo que nos interesa en realidad es el trabajo útil que hace el coche
+por unidad de tiempo. La clave está en el tiempo.
+
+\section{Definición de rendimiento}
+
+Podemos definir el rendimiento como la cantidad de trabajo realizado
+por el computador por unidad de tiempo.
+
+Si estamos interesados en comparar dos computadores respecto al mismo
+trabajo, entonces podemos definir rendimiento como la inversa del
+tiempo de ejecución.
+
+\[ Rendimiento_{x} = \frac{1}{Tiempo\_de\_ejecución_{x}} \]
+
+Para comparar el rendimiento de dos computadores diremos que $x$ es un
+n\% más rápido que $y$ si:
+
+\[ \frac{Rendimiento_{x}}{Rendimiento_{y}} = 1 + \frac{n}{100} \]
+
+Por tanto:
+
+\[ \frac{Rendimiento_{x}}{Rendimiento_{y}} =
+\frac{\frac{1}{Tiempo\_de\_ejecución_{x}}}{\frac{1}{Tiempo\_de\_ejecución_{y}}}
+= \frac{Tiempo\_de\_ejecución_{y}}{Tiempo\_de\_ejecución_{x}} = 1 + \frac{n}{100}\]
+
 
 \section{Tiempo de ejecución}
+
+Fórmula del tiempo de ejecución \[ T_{ej} = NI \times CPI \times
+T_{c} \]
+
+Fórmula del CPI \[ CPI = \sum_{i=1}^{n} CPI_i \times f_i \]
+
+\subsection{Ejercicio}
+
+Tenemos la siguiente distribución de instrucciones:
+
+\begin{center}
+\begin{tabular}{lrr}
+\hline
+{\textbf{Tipo}} & {\textbf{Porcentaje}} & {\textbf{Ciclos}} \\
+\hline
+ALU & 33\% & 2 \\
+Load & 21\% & 3 \\
+Store & 12\% & 3 \\
+Branch & 24\% & 3 \\
+FP & 10\% & 12 \\
+\hline
+\end{tabular}
+\end{center}
+
+Sabemos que podemos reducir el número de ciclos de las operaciones
+de FP a la mitad, pero ello nos provocará un incremento del ciclo
+de reloj del 25\%. Además ahora las cargas consumirán un ciclo
+más.
+
+\begin{enumerate}
+
+\item[a)] ¿Cuál de las máquinas es más rápida ahora? ¿En qué factor?.
+\item[b)] Si conseguimos no afectar a las cargas con la modificación, ¿varía
+el resultado obtenido? ¿Ahora qué máquina es la más rápida? ¿En
+qué factor?.
+
+\end{enumerate}
+
+\subsection{Solución}
+
+Se trata de calcular en ambos casos el tiempo de CPU usando la fórmula explicada en la teoría:
+\[ T_{CPU} = NI \times CPI \times T_{ciclo} \]
+
+A partir de los resultados se determina qué máquina es más rápida y se calcula el factor de mejora.
+
+\subsection*{Apartado a}
+
+Empezamos por la configuración original (sin aplicar la optimización que describe el enunciado):
+\[ T_{CPU\_orig} = NI_{orig} \times CPI_{orig} \times T_{ciclo\_orig} \]
+
+donde $CPI_{orig} = 0.33 \times 2 + 0.21 \times 3 + 0.12 \times 3 + 0.24 \times 3 + 0.10 \times 12 = 3.57$, así pues nos queda que:
+\[ T_{CPU\_orig} = NI_{orig} \times 3.57 \times T_{ciclo\_orig} \]
+
+Para la configuración alternativa el tiempo de ciclo se incrementa un 25\% con respecto al original, y los ciclos que tardan las operaciones FP y las cargas se modifican. Tenemos que:
+\begin{align*}
+  T_{ciclo\_alt} &= 1.25 \times T_{ciclo\_orig}\\
+  CPI_{alt} &= 0.33 \times 2 + 0.21 \times 4 + 0.12 \times 3 + 0.24 \times 3 + 0.10 \times 6 = 3.18
+\end{align*}
+
+El número de instrucciones no cambia ($NI_{alt} = NI_{orig}$), por lo que:
+\[ T_{CPU\_alt} = NI_{alt} \times 3.18 \times T_{ciclo\_alt} = NI_{orig} \times 3.18 \times 1.25 \times T_{ciclo\_orig} = NI_{orig} \times 3.975 \times T_{ciclo\_orig} \]
+
+Por lo tanto, la configuración original es $1.1134$ veces ($3.975 / 3.57$) más rápida que la alternativa propuesta, o lo que es lo mismo: un 11.34\%.
+
+\subsection*{Apartado b}
+
+En este caso hay que volver a calcular el CPI de la configuración alternativa teniendo en cuenta que el número de ciclos de las cargas no se ve afectado:
+\begin{align*}
+CPI_{alt} &= 0.33 \times 2 + 0.21 \times 3 + 0.12 \times 3 + 0.24 \times 3 + 0.10 \times 6 = 2.97 \\
+T_{CPU\_alt} &= NI_{orig} \times 2.97 \times 1.25 \times T_{ciclo\_orig} = NI_{orig} \times 3.7125 \times T_{ciclo\_orig}
+\end{align*}
+
+La configuración original sigue siendo más rápida, esta vez en un factor 1.04 ($3.7125/3.57$).
+
+\section{Métricas populares}
+
+Otras métricas como MIPS (millones de instrucciones por segundo) y
+MFLOPS (millones de operaciones de punto flotante por segundo) usado
+en \url{top500.org} son métricas de velocidad y tienen una serie de
+desventajas.
+
+Volviendo al símil del coche, los kilómetros recorido sería el
+equivalente al número de instrucciones ejecutadas por el programa.
+
+Un computador puede ofecer más MIPS a costa de requerir ejecutar más
+instrucciones para realizar la misma tarea que otro programa con menos
+instrucciones.
 
 \section{La Ley de Amdahl}
 
