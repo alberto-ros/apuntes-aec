@@ -1,0 +1,8 @@
+# Result of compilation
+build/*
+
+# Latex files in case someone doesn't use the Makefile to compile
+*.out
+*.aux
+*.log
+*.pdf
