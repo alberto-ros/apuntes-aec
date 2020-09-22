@@ -1,10 +1,11 @@
 DOCNAME=apuntes-aec
+BDIR=build
 
-pdf: | build
-	pdflatex $(DOCNAME).tex
+pdf: | $(BDIR)
+	pdflatex -output-directory $(BDIR) $(DOCNAME).tex
 
-build:
-	mkdir build
+$(BDIR):
+	mkdir $(BDIR)
 
 clean: 
-	rm -f $(DOCNAME).pdf $(DOCNAME).out $(DOCNAME).log $(DOCNAME).aux *~
+	rm -f $(BDIR)/* *~
