@@ -21,7 +21,19 @@
 \usepackage{setspace}
 \usepackage{rotating}
 \usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{framed}
 
+\definecolor{goldenpoppy}{rgb}{0.99, 0.86, 0.3}
+\definecolor{dark-green}{rgb}{0,0.5,0}
+\definecolor{metallic-green}{rgb}{0.75,0.81,0.58}
+\definecolor{dark-red}{rgb}{0.5,0,0}
+
+\newenvironment{ejercicio}{%
+    \def\FrameCommand{\fboxrule=\FrameRule\fboxsep=\FrameSep \fcolorbox{black}{metallic-green}}%
+    \MakeFramed {\FrameRestore}}%
+{\endMakeFramed}
+               
 \hypersetup{ 
   pdfauthor = {Alberto Ros Bardisa}, 
   pdftitle = {Apuntes de Ampliación de Estructuras de Computadores}, 
@@ -240,6 +252,8 @@ tiempo de ejecución.
 Para comparar el rendimiento de dos computadores diremos que $x$ es un
 n\% más rápido que $y$ si:
 
+% TODO: Comentar SpeedUp aquí
+
 \[ \frac{Rendimiento_{x}}{Rendimiento_{y}} = 1 + \frac{n}{100} \]
 
 Por tanto:
@@ -256,8 +270,10 @@ T_{c} \]
 
 Fórmula del CPI \[ CPI = \sum_{i=1}^{n} CPI_i \times f_i \]
 
-\subsection{Ejercicio}
+\begin{ejercicio}
 
+  \subsection*{Ejercicio}
+    
 Tenemos la siguiente distribución de instrucciones:
 
 \begin{center}
@@ -288,14 +304,14 @@ qué factor?.
 
 \end{enumerate}
 
-\subsection{Solución}
+\subsection*{Solución}
 
 Se trata de calcular en ambos casos el tiempo de CPU usando la fórmula explicada en la teoría:
 \[ T_{CPU} = NI \times CPI \times T_{ciclo} \]
 
 A partir de los resultados se determina qué máquina es más rápida y se calcula el factor de mejora.
 
-\subsection*{Apartado a}
+\subsubsection*{Apartado a}
 
 Empezamos por la configuración original (sin aplicar la optimización que describe el enunciado):
 \[ T_{CPU\_orig} = NI_{orig} \times CPI_{orig} \times T_{ciclo\_orig} \]
@@ -309,12 +325,15 @@ Para la configuración alternativa el tiempo de ciclo se incrementa un 25\% con 
   CPI_{alt} &= 0.33 \times 2 + 0.21 \times 4 + 0.12 \times 3 + 0.24 \times 3 + 0.10 \times 6 = 3.18
 \end{align*}
 
-El número de instrucciones no cambia ($NI_{alt} = NI_{orig}$), por lo que:
-\[ T_{CPU\_alt} = NI_{alt} \times 3.18 \times T_{ciclo\_alt} = NI_{orig} \times 3.18 \times 1.25 \times T_{ciclo\_orig} = NI_{orig} \times 3.975 \times T_{ciclo\_orig} \]
+El número de instrucciones no cambia ($NI_{alt} = NI_{orig}$), por lo
+que:
+\[ T_{CPU\_alt} = NI_{alt} \times 3.18 \times T_{ciclo\_alt} =
+NI_{orig} \times 3.18 \times 1.25 \times T_{ciclo\_orig} = \]
+\[ = NI_{orig} \times 3.975 \times T_{ciclo\_orig} \]
 
 Por lo tanto, la configuración original es $1.1134$ veces ($3.975 / 3.57$) más rápida que la alternativa propuesta, o lo que es lo mismo: un 11.34\%.
 
-\subsection*{Apartado b}
+\subsubsection*{Apartado b}
 
 En este caso hay que volver a calcular el CPI de la configuración alternativa teniendo en cuenta que el número de ciclos de las cargas no se ve afectado:
 \begin{align*}
@@ -323,6 +342,8 @@ T_{CPU\_alt} &= NI_{orig} \times 2.97 \times 1.25 \times T_{ciclo\_orig} = NI_{o
 \end{align*}
 
 La configuración original sigue siendo más rápida, esta vez en un factor 1.04 ($3.7125/3.57$).
+
+\end{ejercicio}
 
 \section{Métricas populares}
 
@@ -340,12 +361,74 @@ instrucciones.
 
 \section{La Ley de Amdahl}
 
+Imaginemos una aplicación en la que el 80\% del tiempo lo pasa
+haciendo una tarea (T1) y el 20\% del tiempo lo pasa haciendo otra
+tarea (T2).
+
+%\begin{figure}
+\begin{center}
+  \begin{tikzpicture}
+    \draw[draw=white] (0,0.6) rectangle node {80\%} ++(4,0.5);
+    \draw[draw=white] (4,0.6) rectangle node {20\%} ++(1,0.5);
+    \draw[draw=black] (0,0) rectangle node {T1} ++(4,0.5);
+    \draw[draw=black] (4,0) rectangle node {T2} ++(1,0.5);
+  \end{tikzpicture}
+\end{center}
+%\end{figure}
+
+Con mucho esfuerzo hemos conseguido eliminar completamente la tarea
+T2. ¿Cuál será el SpeedUp o mejora del rendimiento de la aplicación?
+
+Si antes tardaba $x$ segundos y ahora tarda 0.8$x$ segundos, entonces
+tenemos que:
+
+\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.8x} = \frac{1}{0.8} = 1.25 \]
+
+La mejora es por tanto de un 25\%.
+
+Consideremos ahora que la tarea T2 en vez de eliminarla completamente,
+hemos conseguido tan solo hacerla el doble de rápido. ¿Cuál será el
+SpeedUp obtenido en este caso?
+
+Si la tarea se ejecuta el doble de
+rápido, tardará la mitad del tiempo, y por tanto tenemos:
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[draw=white] (0,0.25) node[left] {programa base};
+    \draw[draw=white] (0,0.6) rectangle node {80\%} ++(4,0.5);
+    \draw[draw=white] (4,0.6) rectangle node {20\%} ++(1,0.5);
+    \draw[draw=black] (0,0) rectangle node {T1} ++(4,0.5);
+    \draw[draw=black] (4,0) rectangle node {T2} ++(1,0.5);
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \draw[draw=white] (0,0.25) node[left] {programa opt};
+    \draw[draw=white] (0,0.6) rectangle node {80\%} ++(4,0.5);
+    \draw[draw=white] (4,0.6) rectangle node {10\%} ++(0.5,0.5);
+    \draw[draw=black] (0,0) rectangle node {T1} ++(4,0.5);
+    \draw[draw=black] (4,0) rectangle node {T2} ++(0.5,0.5);
+  \end{tikzpicture}
+\end{center}
+
+El programa optimizado tiene los porcentajes relativos al tiempo del
+primer programa. El SpeedUp en este caso sería:
+
+\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.9x} = \frac{1}{0.9} = 1.11 \]
+
+
+
 La ley de \href{https://es.wikipedia.org/wiki/Gene_Amdahl}{Amdahl} es una 
-fórmula matemática que describe la mejora total en el rendimiento de un 
-sistema(procesador en nuestro caso) con respecto a la mejora de una fracción 
-de dicho sistema, es decir, si mejoramos una parte CONOCIDA de una tarea un 
+fórmula matemática que describe la mejora total en el rendimiento (o SpeedUp) de un 
+sistema (computador en nuestro caso) con respecto a la mejora de una fracción 
+de dicho sistema, es decir, si mejoramos una parte CONOCIDA de una
+tarea 
 porcentaje CONOCIDO, esta fórmula nos permite saber el porcentaje que ha mejorado
 todo el procesador PARA ESOS VALORES.
+
+\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{1}{(1 - f) + \frac{f}{S}} \]
+
+donde $f$ representa la fracción del tiempo en el caso base de la
+parte que se mejora y $S$ representa el cuantas veces se mejora dicha parte. 
 
 Por ejemplo: En un procesador vamos a mejorar las instrucciones en coma flotante para
 que vayan el doble de rápidas, pero solamente ocupan el 10\% del tiempo de ejecución 
@@ -354,7 +437,7 @@ parte estamos mejorando(el 10\% del total) y sabemos que porcentaje estamos mejo
 (el doble, o sea un 100\%).
 (Este ejercicio está resuelto en las transparencias, página 19) %Alguien debería de escribirlo en estos apuntes :/
 Cabe destacar que que la mejora no es global, pues al usar otro programa, seguramente
-cambie cuanto porcentaje del tiempo se dedica a las instrucciones de coma flontante,
+cambie cuanto porcentaje del tiempo se dedica a las instrucciones de coma flotante,
 por tanto la mejora total no sería la misma que en el caso anterior.
 
 \section{Cómo comparar resultados}
