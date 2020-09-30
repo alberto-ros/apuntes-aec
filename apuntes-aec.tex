@@ -340,6 +340,23 @@ instrucciones.
 
 \section{La Ley de Amdahl}
 
+La ley de \href{https://es.wikipedia.org/wiki/Gene_Amdahl}{Amdahl} es una 
+fórmula matemática que describe la mejora total en el rendimiento de un 
+sistema(procesador en nuestro caso) con respecto a la mejora de una fracción 
+de dicho sistema, es decir, si mejoramos una parte CONOCIDA de una tarea un 
+porcentaje CONOCIDO, esta fórmula nos permite saber el porcentaje que ha mejorado
+todo el procesador PARA ESOS VALORES.
+
+Por ejemplo: En un procesador vamos a mejorar las instrucciones en coma flotante para
+que vayan el doble de rápidas, pero solamente ocupan el 10\% del tiempo de ejecución 
+con nuestro programa; en este caso podemos aplicar la Ley de Amdahl porque sabemos que
+parte estamos mejorando(el 10\% del total) y sabemos que porcentaje estamos mejorando
+(el doble, o sea un 100\%).
+(Este ejercicio está resuelto en las transparencias, página 19) %Alguien debería de escribirlo en estos apuntes :/
+Cabe destacar que que la mejora no es global, pues al usar otro programa, seguramente
+cambie cuanto porcentaje del tiempo se dedica a las instrucciones de coma flontante,
+por tanto la mejora total no sería la misma que en el caso anterior.
+
 \section{Cómo comparar resultados}
 
 \section{Programas de prueba (benchmarks)}
