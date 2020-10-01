@@ -255,13 +255,16 @@ n\% más rápido que $y$ si:
 \[ \frac{Rendimiento_{x}}{Rendimiento_{y}} = 1 + \frac{n}{100} \]
 
 La mejora de rendimiento se conoce también por el término inglés
-\emph{SpeedUp}.
+\emph{speedup}.
 
-\[ \emph{SpeedUp} = \frac{Rendimiento_{x}}{Rendimiento_{y}} \]
+%\emph{speedup} is a number that measures the relative performance of two systems
+%processing the same problem
+
+\[ \emph{Speedup} = \frac{Rendimiento_{x}}{Rendimiento_{y}} \]
 
 Por tanto:
 
-\[ \emph{SpeedUp} = \frac{Rendimiento_{x}}{Rendimiento_{y}} =
+\[ \emph{Speedup} = \frac{Rendimiento_{x}}{Rendimiento_{y}} =
 \frac{\frac{1}{Tiempo\_de\_ejecución_{x}}}{\frac{1}{Tiempo\_de\_ejecución_{y}}}
 = \frac{Tiempo\_de\_ejecución_{y}}{Tiempo\_de\_ejecución_{x}} = 1 + \frac{n}{100}\]
 
@@ -381,18 +384,18 @@ tarea (T2).
 
 Imaginemos también que, con mucho esfuerzo, hemos conseguido eliminar
 completamente la necesitad de ejecutar la tarea
-T2. ¿Cuál será el \emph{SpeedUp} o mejora del rendimiento de la aplicación?
+T2. ¿Cuál será el \emph{speedup} o mejora del rendimiento de la aplicación?
 
 Si la aplicación antes (llamémosla base) tardaba $x$ segundos y la
 aplicación ahora (llamémosla optimizada u opt) tarda 0.8$x$
 segundos (un 80\% del tiempo de la aplicación base), entonces tenemos que:
 
-\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.8x} =
+\[ Speedup = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.8x} =
 \frac{1}{0.8} = 1.25 ~ ~ (25\%) \]
 
 Consideremos ahora que en vez de eliminar completamente la tarea T2
 hemos conseguido hacerla tan solo el doble de rápido. ¿Cuál será el
-\emph{SpeedUp} obtenido en este caso con respecto a la aplicación base?
+\emph{speedup} obtenido en este caso con respecto a la aplicación base?
 
 Si la tarea se ejecuta el doble de
 rápido, tardará la mitad del tiempo, y por tanto tenemos:
@@ -415,21 +418,21 @@ rápido, tardará la mitad del tiempo, y por tanto tenemos:
 \end{center}
 
 donde el programa optimizado muestra porcentajes relativos al tiempo
-del primer programa. El \emph{SpeedUp} en este caso sería:
+del primer programa. El \emph{speedup} en este caso sería:
 
-\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.9x} = \frac{1}{0.9} = 1.11 \]
+\[ Speedup = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{x}{0.9x} = \frac{1}{0.9} = 1.11 \]
 
-Para calcular este \emph{SpeedUp} hemos hecho uso de la Ley de Amdahl.
+Para calcular este \emph{speedup} hemos hecho uso de la Ley de Amdahl.
 
 La Ley de \href{https://es.wikipedia.org/wiki/Gene_Amdahl}{Amdahl} es una 
-fórmula matemática que describe la mejora total en el rendimiento (o \emph{SpeedUp}) de un 
+fórmula matemática que describe la mejora total en el rendimiento (o \emph{speedup}) de un 
 sistema (computador en nuestro caso) con respecto a la mejora de una
 fracción de tiempo
 de dicho sistema, es decir, si mejoramos una tarea cuya fracción de
 tiempo ($f$) se conoce en un factor $S$, la siguiente fórmula nos permite saber el porcentaje de
 mejora del sistema.
 
-\[ SpeedUp = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{1}{(1 - f) + \frac{f}{S}} \]
+\[ Speedup = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{1}{(1 - f) + \frac{f}{S}} \]
 
 Por ejemplo, si en un procesador conseguimos mejorar las instrucciones en coma flotante para
 que se ejecuten el doble de rápidas,
@@ -438,7 +441,7 @@ instrucciones podemos aplicar la Ley de Amdahl, ya que sabemos el
 porcentaje de tiempo de la parte mejorada (10\% del total) y sabemos
 en qué factor estamos mejorando (el doble, o sea un factor de 2).
 
-\[ SpeedUp = \frac{1}{(1 - f) + \frac{f}{S}} = \frac{1}{(1 - 0.1) +
+\[ Speedup = \frac{1}{(1 - f) + \frac{f}{S}} = \frac{1}{(1 - 0.1) +
   \frac{0.1}{2}} = 1.053 ~ ~ (5.3\%) \]
 
 Cabe destacar que la mejora podría cambiar al ejecutar otra aplicación
@@ -464,9 +467,9 @@ coste/rendimiento?
 
 Inicialmente, la relación coste/rendimiento de la máquina es $C/R$. Vamos a calcular cómo se incrementa el rendimiento por un lado y el coste por otro con el cambio. Si el rendimiento se incrementa en mayor medida que el coste, o ambos aspectos se ven mejorados en igual proporción, entonces el cambio es interesante desde el punto de vista de la relación coste/rendimiento. Si el coste se incrementa en mayor medida que el rendimiento, entonces el cambio no es aconsejable.
 
-Para calcular la mejora en el rendimiento que se obtiene con el cambio aplicamos la ley de Amdahl, considerando que la CPU se usa el 50\% del tiempo: 
+Para calcular la mejora en el rendimiento que se obtiene con el cambio aplicamos la Ley de Amdahl, considerando que la CPU se usa el 50\% del tiempo: 
 
-\[Speedup = \frac{1}{1-0.5 + 0.5/5} = 1.667\]
+\[\emph{Speedup} = \frac{1}{1-0.5 + 0.5/5} = 1.667\]
 
 Lo que significa que el rendimiento tras el cambio $R' = 1.667 \times R$.
 
