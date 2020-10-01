@@ -432,8 +432,31 @@ de dicho sistema, es decir, si mejoramos una tarea cuya fracción de
 tiempo ($f$) se conoce en un factor $S$, la siguiente fórmula nos permite saber el porcentaje de
 mejora del sistema.
 
-\[ Speedup = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{1}{(1 - f) + \frac{f}{S}} \]
 
+\begin{center}
+  \begin{tikzpicture}
+    \draw[draw=white] (0,0.25) node[left] {programa base};
+    \draw[draw=white] (0,0.6) rectangle node {$1 - f$} ++(4,0.5);
+    \draw[draw=white] (4,0.6) rectangle node {$f$} ++(1,0.5);
+    \draw[draw=black,fill=black!20] (0,0) rectangle ++(4,0.5);
+    \draw[draw=black,fill=black!10] (4,0) rectangle ++(1,0.5);
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \draw[draw=white] (0,0.25) node[left] {programa opt};
+    \draw[draw=white] (0,0.6) rectangle node {$1 - f$} ++(4,0.5);
+    \draw[draw=white] (4,0.6) rectangle node {$f/S$} ++(0.5,0.5);
+    \draw[draw=black,fill=black!20] (0,0) rectangle ++(4,0.5);
+    \draw[draw=black,fill=black!10] (4,0) rectangle ++(0.5,0.5);
+  \end{tikzpicture}
+\end{center}
+
+\[ Speedup = \frac{Tiempo_{base}}{Tiempo_{opt}} = \frac{(1 - f) +
+  f}{(1 - f) + \frac{f}{S}} = \frac{1}{(1 - f) + \frac{f}{S}} \]
+
+\begin{center}
+\framebox{$Speedup = \frac{1}{(1 - f) + \frac{f}{S}}$}
+\end{center}
+  
 Por ejemplo, si en un procesador conseguimos mejorar las instrucciones en coma flotante para
 que se ejecuten el doble de rápidas,
 pero el procesador ejecuta una aplicación que solo dedica un 10\% de su tiempo a ejecutar estas
