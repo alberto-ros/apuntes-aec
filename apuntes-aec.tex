@@ -508,13 +508,31 @@ En esta sección veremos qué pasa cuando tenemos varias aplicaciones
 que ofrecen diferentes prestaciones dependiendo de la máquina donde se
 ejecuten.
 
-Media aritmética.
+Imaginemos que tenemos dos computadores y dos aplicaciones que usamos
+para evaluar su rendimiento y obtenemos los siguientes tiempos al
+ejecutar las aplicaciones:
 
-Media aritmética ponderada.
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+  & Computador A & Computador B \\ 
+\hline
+ Aplicación 1 & 10 seg & 1 seg \\  
+ Aplicación 2 & 20 seg & 100 seg \\
+ \hline
+\end{tabular}
+\end{center}
 
-Media armónica.
+Qué computador comprarías?
 
-Media geométrica.
+Media aritmética: Usada cuando tenemos tiempos.
+
+Media aritmética ponderada: Usada si sabemos cuanto vamos a usar cada aplicación.
+
+Media armónica: Usada para inversas del tiempo (freq, velocidad). Motivación con el ejemplo del coche. Si una coche hace un viaje de ida y vuelta y a la idea va a 40km/h y a la vuetla a 60km/h, a qué velocidad media ha ido? Definitivamente no es 50km/h.
+       	 
+
+Media geométrica: Usada cuando normalizamos valores, ya que es independiente del computador que usemos para normalizar.
 
 \section{Programas de prueba (benchmarks)}
 
