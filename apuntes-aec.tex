@@ -243,24 +243,20 @@ por unidad de tiempo. La clave está en el tiempo.
 Podemos definir el rendimiento como la cantidad de trabajo realizado
 por el computador por unidad de tiempo.
 
+Un ordenador es más rápido que otro cuando realiza la misma cantidad
+de trabajo en menor tiempo (disminuye el tiempo de respuesta).
+
 Si estamos interesados en comparar dos computadores respecto al mismo
 trabajo, entonces podemos definir rendimiento como la inversa del
 tiempo de ejecución.
 
 \[ Rendimiento_{x} = \frac{1}{Tiempo\_de\_ejecución_{x}} \]
 
-Para comparar el rendimiento de dos computadores diremos que $x$ es un
+Para comparar el rendimiento relativo de dos computadores cuando
+ejecutan el mismo problema (\emph{speedup} en inglés) diremos que $x$ es un
 n\% más rápido que $y$ si:
 
-\[ \frac{Rendimiento_{x}}{Rendimiento_{y}} = 1 + \frac{n}{100} \]
-
-La mejora de rendimiento se conoce también por el término inglés
-\emph{speedup}.
-
-%\emph{speedup} is a number that measures the relative performance of two systems
-%processing the same problem
-
-\[ \emph{Speedup} = \frac{Rendimiento_{x}}{Rendimiento_{y}} \]
+\[ \emph{Speedup} = \frac{Rendimiento_{x}}{Rendimiento_{y}} = 1 + \frac{n}{100} \]
 
 Por tanto:
 
@@ -268,13 +264,23 @@ Por tanto:
 \frac{\frac{1}{Tiempo\_de\_ejecución_{x}}}{\frac{1}{Tiempo\_de\_ejecución_{y}}}
 = \frac{Tiempo\_de\_ejecución_{y}}{Tiempo\_de\_ejecución_{x}} = 1 + \frac{n}{100}\]
 
-
 \section{Tiempo de ejecución}
 
-Fórmula del tiempo de ejecución \[ T_{ej} = NI \times CPI \times
-T_{c} \]
+El tiempo de ejecución es la mejor métrica para medir el rendimiento.
 
-Fórmula del CPI \[ CPI = \sum_{i=1}^{n} CPI_i \times f_i \]
+Tiempo de ejecución de un programa se puede calcular de la siguiente forma:
+
+\[ T_{ej} = NI \times CPI \times T_{c} \]
+
+donde $NI$ representa el número de instrucciones de un programa, $CPI$
+son los ciclos por instrucción y $T_{c}$ es el tiempo de ciclo del
+computador.
+
+El CPI se puede calcular de la siguiente forma, conociendo cuantos
+ciclos tarda de media cada tipo de instrucción ($CPI$) y su frecuencia de
+aparición ($f_i$):
+
+\[ CPI = \sum_{i=1}^{n} CPI_i \times f_i \]
 
 \begin{ejercicio}
 
@@ -353,17 +359,35 @@ La configuración original sigue siendo más rápida, esta vez en un factor 1.04
 
 \section{Métricas populares}
 
-Otras métricas como MIPS (millones de instrucciones por segundo) y
-MFLOPS (millones de operaciones de punto flotante por segundo) usado
-en \url{top500.org} son métricas de velocidad y tienen una serie de
-desventajas.
+MIPS (millones de instrucciones por segundo)
 
-Volviendo al símil del coche, los kilómetros recorido sería el
-equivalente al número de instrucciones ejecutadas por el programa.
+\[ \emph{MIPS} = \frac{NI \times 10^{-6}}{T_{ej}} = \frac{Freq (MHz)}{CPI} \]
 
-Un computador puede ofecer más MIPS a costa de requerir ejecutar más
+es una métrica de
+velocidad es fáciles de comprender ya que más MIPS significa más
+rápido. Sin embargo tiene una serie de desventajas importantes: Son
+dependientes del conjunto de instrucciones, varía entre programas en
+el mismo ordenador y puede variar inversamente al rendimiento (por
+ejemplo, un computador puede ofecer más MIPS a costa de requerir ejecutar más
 instrucciones para realizar la misma tarea que otro programa con menos
-instrucciones.
+instrucciones).
+
+MFLOPS (millones de operaciones de punto flotante por segundo),
+
+\[ \emph{MFLOPS} = \frac{NI P.F. \times 10^{-6}}{T_{ej}} \]
+
+usado
+en \url{top500.org}, es otra métrica de velocidad y su principal
+ventaja es que el número de instrucciones de punto flotante (P.F.)
+depende del algoritmo, no de la máquina. Sin embargo, también tiene una serie
+de desventajas: no se pueden aplicar a todos los programas (por
+ejemplo un compilador no usa operaciones de punto flotante), todas las
+máquinas no tienen las mismas operaciones de punto flotante y todas
+las operaciones de punto flotante no tardan lo mismo (por ejemplo una
+división tarda mucho más ciclos que una suma).
+
+Volviendo al símil del coche, los kilómetros recorridos por el coche sería el
+equivalente al número de instrucciones ejecutadas por el programa.
 
 \section{La Ley de Amdahl}
 
@@ -502,62 +526,280 @@ Concluimos, pues, que el cambio no es interesante, ya que el coste se incrementa
 
 \end{ejercicio}
 
-\section{Cómo comparar resultados}
+\section{Cómo obtener el rendimiento medio}
 
-En esta sección veremos qué pasa cuando tenemos varias aplicaciones
-que ofrecen diferentes prestaciones dependiendo de la máquina donde se
+En esta sección veremos como obtener el rendimiento medio cuando
+ejecutamos varias aplicaciones que ofrecen diferentes prestaciones dependiendo de la máquina donde se
 ejecuten.
 
-Imaginemos que tenemos dos computadores y dos aplicaciones que usamos
-para evaluar su rendimiento y obtenemos los siguientes tiempos al
-ejecutar las aplicaciones:
+Imaginemos, por ejemplo, que tenemos dos computadores ($A$ y $B$) y
+dos aplicaciones ($1$ y $2$) que usamos
+para evaluar el rendimiento de los computadores. Al ejecutar las
+aplicaciones en ambos computadores obtenemos los siguientes tiempos:
 
 \begin{center}
 \begin{tabular}{ccc}
 \hline
-  & Computador A & Computador B \\ 
+  & Computador $A$ & Computador $B$ \\ 
 \hline
- Aplicación 1 & 10 seg & 1 seg \\  
- Aplicación 2 & 20 seg & 100 seg \\
+ Aplicación 1 & 10 segundos & 2 segundos \\  
+ Aplicación 2 & 20 segundos & 60 segundos \\
  \hline
 \end{tabular}
 \end{center}
 
-¿Qué computador comprarías? ¿Qué computador obtiene mejor rendimiento?
-
-Para tomar esta decisión se puede usar la media de las aplicaciones
-para cada computador, pero hay que tener mucho cuidado con la media a
-usar.
+¿Qué computador obtiene mejor rendimiento?
+Para tomar esta decisión se podría obtener la media del rendimiento de las aplicaciones
+para cada computador, pero hay que tener mucho cuidado con qué media
+es mejor usar en cada caso.
 
 \subsection{Media aritmética}
 
-Podríamos simplemente calcular la media aritmética usando el tiempo de
-cada aplicación:
+La media aritmética equivale a usar para obtener el rendimiento la
+suma de los tiempos de ejecución de todas las aplicaciones.
 
- Media\_aritmética \[ = \sum_{i=1}^{n} \frac{tiempo_i }{n} \]
+Para obtener la media aritmética usaríamos la siguiente fórmula:
 
+\[ Media\_aritm\acute{e}tica = \sum_{i=1}^{n} \frac{tiempo_i }{n} \]
 
-Usada cuando tenemos tiempos.
+Esta media es adecuada cuando disponemos de los tiempos de cada
+programa pero no sabemos con qué frecuencia se va a ejecutar cada uno.
+
+En el ejemplo anterior, la media aritmética para el computador $A$ y
+$B$ sería:
+
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+  & Computador $A$ & Computador $B$ \\ 
+\hline
+ Aplicación 1 & 10 segundos & 2 segundos \\  
+ Aplicación 2 & 20 segundos & 60 segundos \\
+ \hline
+ Media aritmética & 15 segundos & 31 segundos \\
+ \hline
+\end{tabular}
+\end{center}
+
+Por tanto, podríamos decir que el computador $A$ es
+$\frac{31}{15}=2.07$ veces más rápido que el computador $B$.
 
 \subsection{Media aritmética ponderada}
 
-Usada si sabemos cuanto vamos a usar cada aplicación.
+No todos los programas se ejecutan el mismo número de veces en una
+máquina. Si supiéramos la frecuencia de ejecución de cada programa,
+podríamos obtener una mejor medida del rendimiento del computador
+aplicando media aritmética ponderada:
+
+\[ Media\_aritm\acute{e}tica\_ponderada = \sum_{i=1}^{n} w_i \times tiempo_i \]
+
+donde $w_i$ es el ratio de ejecución de cada aplicación.
+
+Imaginemos ahora que sabemos que la aplicación 1 se va a ejecutar un
+10\% de las veces y la aplicación 2 el 90\% restante.
+
+En ese caso podríamos calcular la media aritmética ponderada:
+
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+  & Computador $A$ & Computador $B$ \\ 
+\hline
+ Aplicación 1 (w = 0.1) & 10 segundos & 2 segundos \\  
+ Aplicación 2 (w = 0.9) & 20 segundos & 60 segundos \\
+ \hline
+ Media aritmética ponderada & 19 segundos & 54.2 segundos \\
+ \hline
+\end{tabular}
+\end{center}
+
+Podríamos decir en este caso que el computador $A$ es
+$\frac{54.2}{19}=2.85$ veces más rápido que el computador $B$.
+
+Si por el contrario la aplicación 1 se ejecutara un
+90\% de las veces y la aplicación 2 el 10\% restante, la media
+aritmética ponderada quedaría como:
+
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+  & Computador $A$ & Computador $B$ \\ 
+\hline
+ Aplicación 1 (w = 0.9) & 10 segundos & 2 segundos \\  
+ Aplicación 2 (w = 0.1) & 20 segundos & 60 segundos \\
+ \hline
+ Media aritmética ponderada & 11 segundos & 7.8 segundos \\
+ \hline
+\end{tabular}
+\end{center}
+
+En este caso deberíamos decir que el computador $B$ es
+$\frac{11}{7.8}=1.41$ veces más rápido que el computador $A$.
+
+Como vemos el rendimiento puede cambiar dependiendo de la frecuencia
+de ejecución de los programas.
+
+\subsection{Media geométrica}
+\label{sec:media_geometrica}
+
+A veces es interesante normalizar los resultados obtenidos, con el fin
+de que una aplicación que tarda mucho más que otra no tenga
+necesariamente más peso en la media final.
+
+Normalizar significa dividir los resulatados de las aplicaciones por
+los obtenidos por dichas aplicaciones en una máquina de referencia.
+
+Por ejemplo, podemos normalizar los resultados anteriores respecto al
+computador $A$, dividiendo todos los tiempo por los obtenidos por el
+computador $A$:
+
+\begin{center}
+\begin{tabular}{ccccc}
+\hline
+  & Computador $A$ & Computador $B$ & Norm $A$(/$A$) & Norm $B$(/$A$) \\ 
+\hline
+Aplicación 1 & 10 segundos & 2 segundos & 1 & 0.2 \\  
+Aplicación 2 & 20 segundos & 60 segundos & 1 & 3 \\
+\hline
+\end{tabular}
+\end{center}
+
+Cuando tenemos números normalizados no podemos usar la media
+aritmética ya que puede ser engañosa: dependiendo de la máquina de
+referencia (para la que normalizamos) el resultado puede ser que una
+máquina es mejor o que la otra es mejor.
+
+Por tanto, cuando tengamos números normalizados debemos utilizar la
+media geométrica, ya que ofrecerá un resultado independiente del
+computador que usemos para normalizar.
+
+\[ Media\_geom\acute{e}trica = \sqrt[n]{\prod_{i=1}^{n} tiempo\_normalizado_i} \]
+
+Veámoslo con el ejemplo normalizado respecto al computador $A$:
+
+\begin{center}
+\begin{tabular}{ccccc}
+\hline
+  & Computador $A$ & Computador $B$ & Norm $A$(/$A$) & Norm $B$(/$A$) \\ 
+\hline
+Aplicación 1 & 10 segundos & 2 segundos & 1 & 0.2 \\  
+Aplicación 2 & 20 segundos & 60 segundos & 1 & 3 \\
+\hline
+\multicolumn{2}{l}{Media aritmética} &  & 1 & 1.6 \\
+\hline
+\multicolumn{2}{l}{Media geométrica} &  & 1 & 0.77 \\
+\hline
+\end{tabular}
+\end{center}
+
+En este caso la media aritmética me indica que el computador $A$ es
+más rápido que $B$ pero la media geométrica me indica que el
+computador $B$ es $\frac{1}{0.77}=1.29$ veces más rápido que $A$.
+
+Vemos ahora qué sucede si normalizamos con respecto al computador $B$:
+
+\begin{center}
+\begin{tabular}{ccccc}
+\hline
+  & Computador $A$ & Computador $B$ & Norm $A$(/$B$) & Norm $B$(/$B$) \\ 
+\hline
+Aplicación 1 & 10 segundos & 2 segundos & 5 & 1 \\  
+Aplicación 2 & 20 segundos & 60 segundos & 0.33 & 1 \\
+\hline
+\multicolumn{2}{l}{Media aritmética} &  & 2.67 & 1 \\
+\hline
+\multicolumn{2}{l}{Media geométrica} &  & 1.29 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+En este caso, mientras que la media geométrica me sigue diciendo que
+el computador $B$ es 1.29 veces más rápido que el computador $A$,
+ahora la media aritmética cambia y está deacuerdo con la geométrica en
+que el computador $B$ es más rápido que el computador $A$.
 
 \subsection{Media armónica}
 
-Usada para inversas del tiempo (freq, velocidad). Motivación con el ejemplo del coche. Si una coche hace un viaje de ida y vuelta y a la idea va a 40km/h y a la vuetla a 60km/h, a qué velocidad media ha ido? Definitivamente no es 50km/h.
-       	 
-\subsection{Media geométrica}
+Cuando en vez de tiempos de ejecución dispongamos de velocidades o
+frequencias, como
+es el caso de métricas como MIPS y MFLOPS, no debemos usar la media
+aritmética.
 
-Usada cuando normalizamos valores, ya que es independiente del computador que usemos para normalizar.
+Pongamos de nuevo el ejemplo de un coche que tiene que hacer un
+recorrido esta vez de ida y vuelta. Si el coche viaja a la ida a
+50km/h y a la vuetla a 100km/h, ¿a qué velocidad media ha ido?
+Definitivamente no es 75km/h, por que el tiempo que tarda en ir y en
+volver no es el mismo.
+
+Para calcular la media en este caso aplicaríamos la media armónica.
+
+\[ Media\_arm\acute{o}nica = \frac{n}{\sum_{i=1}^{n} \frac{1}{velocidad_i}} \]
+
+Y el resultado sería la velocidad media del coche: 66.67km/h
+
+La misma media deberíamos aplicar si tenemos MIPS o MFLOPS, ya que son
+métricas de velocidad.
+
+\subsection{Media armónica ponderada}
+
+Si tuviéramos información sobre las veces que se va a ejecutar cada
+programa y la velocidad de cada uno en cada computador, entonces deberíamos usar la media armónica ponderada:
+
+\[ Media\_arm\acute{o}nica\_ponderada = \frac{n}{\sum_{i=1}^{n} \frac{w_i}{velocidad_i}} \]
+
+Nota: Números de velocidad normalizados se deberán calcular con la
+media geométrica por las razones explicadas en la
+sección~\ref{sec:media_geometrica}.
 
 \section{Programas de prueba (benchmarks)}
 
-Los benchmarks son pruebas que sirven como instrumento para medir el rendimiento de un sistema o de sus componentes. 
-Estas pruebas pueden ser realizadas por cualquiera de los componentes del sistema, ya sea la CPU, tarjeta grafica, RAM, etc.
-Podemos encontrar distintos tipos entre los que destacan nucleos(kernels), benchmarks sinteticos (cuyo objetivo es obtener un perfil medio de ejecucion), benchmarks reducidos, etc.
-- Standard Performance Evaluation Coorporation (SPEC) -> Tiene como objetivo crear un benchmark estandar para medir el rendimiento de computadoras y controlar los resultados de los tests realizados, que posteriormente se hacen publicos. Principalmente enfocado en medir el rendimiento de la CPU.
-- Transaction Processing Council (TPC) -> Usuarios que ejecutan transacciones en una base de datos. El TPC mide la rapidez y fiabilidad con la que se realizan dichas transacciones. La unidad de medida son transacciones por minuto o segundo. 
+Los benchmarks son programas de prueba que sirven como instrumento para medir el rendimiento de un sistema o de sus componentes. 
+
+Estos programas de prueba pueden ser diseñados específicamente para
+medir cualquiera de los componentes del sistema, ya sea la CPU,
+tarjeta grafica, RAM, etc.
+
+Existen distintos tipos de benchmarks con sus ventajas e inconvenientes:
+
+\begin{itemize}
+
+\item Aplicaciones reales: aunque son las más precisas a la hora de
+  obtener el rendimiento, pueden tener problemas de portabilidad.
+
+\item Aplicaciones modificadas: solucionan los problemas de
+  portabilidad de las aplicaciones reales y se centran en un aspecto
+  concreto del sistema.
+  
+\item Nucleos (kernels): son pequeñas partes de cruciales de programas reales, que se
+  ejecutan frecuentemente.
+
+\item Benchmarks reducidos (toys): Son benchmarks pequeños y
+  fácilmente portables, aunque poco útiles para evaluar el rendimiento.
+
+\item Benchmarks sintéticos: si objetivo es obtener un perfil medio de
+  ejecución, por ejemplo se puede indicar cuantas operaciones de
+  lectura el programa va a tener. No son adecuados para
+  obtener medidas de rendimiento fiables.
+
+\end{itemize}
+
+Existen algunos conjuntos de aplicaciones (o benchmark suites) usados ampliamente para evaluar
+prestaciones:
+
+\begin{itemize}
+
+\item SPEC (Standard Performance Evaluation Coorporation): Tiene como
+  objetivo crear un benchmark estándar para medir el rendimiento de
+  computadores y controlar los resultados de los tests realizados, que
+  posteriormente se hacen publicos. Principalmente enfocado en medir
+  el rendimiento de la CPU.
+
+\item TPC (Transaction Processing Council): Modelan usuarios que
+  ejecutan transacciones en una base de datos. El TPC mide la rapidez
+  y fiabilidad con la que se realizan dichas transacciones. La unidad
+  de medida son transacciones por minuto o segundo.
+
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
